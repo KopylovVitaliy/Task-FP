@@ -8,6 +8,7 @@ public class Main {
 
         System.out.println("Введите текст:");
         String text = scanner.nextLine();
+        System.out.println("Топ 10 слов: ");
         text.lines().map(line -> line.toLowerCase().replace(",", "")
                         .replace(".", "")
                         .replace(":", "")
