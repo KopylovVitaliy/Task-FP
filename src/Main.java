@@ -1,8 +1,6 @@
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-// Допустим, у нас есть. информация о о заказе, которая записана :примерно в таком формате.
 
 public class Main {
     public static void main(String[] args) {
@@ -10,27 +8,20 @@ public class Main {
 
         System.out.println("Введите текст:");
         String text = scanner.nextLine();
-        clean(text);
-
+        text.lines().map(line -> line.toLowerCase().replace(",", "")
+                        .replace(".", "")
+                        .replace(":", "")
+                        .replace("(", "")
+                        .replace(")", "")
+                        .toLowerCase()
+                        .split(" "))
+                .flatMap(Arrays::stream)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .sorted(Comparator.comparing((Function<Map.Entry<String, Long>, Long>) Map.Entry::getValue)
+                        .reversed())
+                .limit(10)
+                .forEach(System.out::println);
     }
-    public static void clean(String text){
-        Map<String, Integer> map = new TreeMap<>();
-        List<String> list = List.of(text.replace(",", "")
-                .replace(".", "")
-                .replace(":", "")
-                .replace("(", "")
-                .replace(")", "")
-                .split(" "));
-        list.forEach(x -> {
-            if(map.containsKey(x)){
-                map.put(x, map.get(x) + 1);
-            } else {
-                map.put(x, 1);
-            }
-        });
-
-        }
-        public static void sorted(){
-
-        }
-    }
+}
